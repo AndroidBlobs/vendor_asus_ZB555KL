@@ -1,0 +1,22 @@
+#!/system/bin/sh
+
+if [ $# != 1 ] ; then
+echo "USAGE: $0 keybox_file"
+echo " e.g.: $0 /data/keybox_bin"
+exit 1;
+fi
+
+succeeds_str="succeeds"
+
+result_str=$(StoreKeybox $1)
+echo "$result_str"
+echo "$result_str" | grep -q "$succeeds_str"
+if [ $? -eq 0 ]; then
+    #echo "install_wvkbox succeeds!"
+    setprop atd.keybox.ready TRUE
+    setprop persist.wind.keybox.ready TRUE
+else
+    #echo "install_wvkbox failed!"
+    setprop atd.keybox.ready FALSE
+    setprop persist.wind.keybox.ready FALSE
+fi
